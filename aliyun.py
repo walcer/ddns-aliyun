@@ -59,15 +59,17 @@ def create_domain(access_key_id, access_key_secret, domain_name):
         pass
 
 
-def get_record_value(access_key_id, access_key_secret, domain_name, sub_domain):
+def get_record_value(access_key_id, access_key_secret, domain_name, domain_type, domain_line, sub_domain):
     CommonParams['AccessKeyId'] = access_key_id
     CommonParams['Action'] = 'DescribeDomainRecords'
     CommonParams['DomainName'] = domain_name
+    CommonParams['TypeKeyWord'] = domain_type
+    CommonParams['RRKeyWord'] = sub_domain
     try:
         data = get_response_data(access_key_secret, CommonParams)
         records = data['DomainRecords']['Record']
         for record in records:
-            if record['Type'] == 'A' and record['RR'] == sub_domain:
+            if record['Line'] == domain_line:
                 return record['Value']
         return 0
     except Exception as e:
@@ -75,15 +77,17 @@ def get_record_value(access_key_id, access_key_secret, domain_name, sub_domain):
         return 0
 
 
-def get_record_id(access_key_id, access_key_secret, domain_name, sub_domain):
+def get_record_id(access_key_id, access_key_secret, domain_name, domain_type, domain_line, sub_domain):
     CommonParams['AccessKeyId'] = access_key_id
     CommonParams['Action'] = 'DescribeDomainRecords'
     CommonParams['DomainName'] = domain_name
+    CommonParams['TypeKeyWord'] = domain_type
+    CommonParams['RRKeyWord'] = sub_domain
     try:
         data = get_response_data(access_key_secret, CommonParams)
         records = data['DomainRecords']['Record']
         for record in records:
-            if record['Type'] == 'A' and record['RR'] == sub_domain:
+            if record['Line'] == domain_line:
                 return {record['RecordId']}
         return 0
     except Exception as e:
@@ -91,12 +95,13 @@ def get_record_id(access_key_id, access_key_secret, domain_name, sub_domain):
         return 0
 
 
-def add_record(access_key_id, access_key_secret, domain_name, sub_domain, localIP):
+def add_record(access_key_id, access_key_secret, domain_name, domain_type, domain_line, sub_domain, localIP):
     CommonParams['AccessKeyId'] = access_key_id
     CommonParams['Action'] = 'AddDomainRecord'
     CommonParams['DomainName'] = domain_name
     CommonParams['RR'] = sub_domain
-    CommonParams['Type'] = 'A'
+    CommonParams['Type'] = domain_type
+    CommonParams['Line'] = domain_line
     CommonParams['Value'] = localIP
 
     try:
@@ -107,12 +112,13 @@ def add_record(access_key_id, access_key_secret, domain_name, sub_domain, localI
         return 0
 
 
-def record_ddns(access_key_id, access_key_secret, record_id, sub_domain, localIP):
+def record_ddns(access_key_id, access_key_secret, record_id, domain_type, domain_line, sub_domain, localIP):
     CommonParams['AccessKeyId'] = access_key_id
     CommonParams['Action'] = 'UpdateDomainRecord'
-    CommonParams['RR'] = sub_domain
     CommonParams['RecordId'] = record_id
-    CommonParams['Type'] = 'A'
+    CommonParams['RR'] = sub_domain
+    CommonParams['Type'] = domain_type
+    CommonParams['Line'] = domain_line
     CommonParams['Value'] = localIP
 
     try:

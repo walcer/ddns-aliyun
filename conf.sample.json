@@ -4,10 +4,14 @@
     "domains": [
         {
             "name": "baidu.com",
+            "type": "A",
+            "line": "default",
             "sub_domains": ["@", "*"]
         },
         {
             "name": "google.com",
+            "type": "A",
+            "line": "default",
             "sub_domains": ["@", "*"]
         }
     ]

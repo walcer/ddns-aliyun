@@ -22,14 +22,17 @@ def init_domain(domain):
 
 def ddns(domain):
     for sub_domain in domain['sub_domains']:
-        record_value = aliyun.get_record_value(Access_Key_Id, Access_Key_Secret, domain['name'], sub_domain)
+        record_value = aliyun.get_record_value(Access_Key_Id, Access_Key_Secret, domain['name'], 
+                                                domain['type'], domain['line'], sub_domain)
         if record_value == 0:
-            aliyun.add_record(Access_Key_Id, Access_Key_Secret, domain['name'], sub_domain, LocalIP)
+            aliyun.add_record(Access_Key_Id, Access_Key_Secret, domain['name'], domain['type'], 
+                                domain['line'], sub_domain, LocalIP)
         elif record_value != LocalIP:
             print(f"Begin update [{sub_domain}.{domain['name']}].")
-            record_id = aliyun.get_record_id(Access_Key_Id, Access_Key_Secret, domain['name'], sub_domain)
-            aliyun.record_ddns(Access_Key_Id, Access_Key_Secret, record_id, sub_domain, LocalIP)
-
+            record_id = aliyun.get_record_id(Access_Key_Id, Access_Key_Secret, domain['name'], 
+                                                domain['type'], domain['line'], sub_domain)
+            aliyun.record_ddns(Access_Key_Id, Access_Key_Secret, record_id, domain['type'], 
+                                domain['line'], sub_domain, LocalIP)
     
 def get_ip():
     global LocalIP
