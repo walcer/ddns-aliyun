@@ -79,11 +79,11 @@ ddns-aliyun 是基于[阿里云解析DNS](https://help.aliyun.com/product/29697.
 
         > `sub_domains`通常写 `@` 和 `*` 就够了，二级子域名直接用 `*` 代替，然后在自己的代理服务器（IIS，nginx，Apache等）上面去进行绑定。domain 和 sub_domain 可以不需要事先手动绑定，本程序会自动识别
 
-+ 4. 设置 crontab 定时任务，没30分钟更新DNS记录，并将执行日志写道文件ddns.log：    
++ 4. 设置 crontab 定时任务，每30分钟更新DNS记录，并将执行日志写到日志文件ddns.log：    
         ```bash
         sudo crontab -e
         */30 * * * * python3 /opt/ddns-aliyun/ddns.py >> /opt/ddns-aliyun/ddns.log 2>&1
         ```
-        本教程的定时任务是Linux版本，`*/30` 表示每隔30分钟运行一次，可以自行修改，本教程不做限定。`/opt/ddns-aliyun/ddns.py` 是绝对路径，请根据实际情况进行修改    
+        本教程的定时任务是Linux版本，`*/30` 表示每隔30分钟运行一次，可以自行修改，本教程不做限定。`/opt/ddns-aliyun/ddns.py` 和 `/opt/ddns-aliyun/ddns.log` 是绝对路径，请根据实际情况进行修改    
         
         Windows版请自行学习[Windows 任务计划](https://jingyan.baidu.com/article/0964eca26a53b08285f536d2.html)
