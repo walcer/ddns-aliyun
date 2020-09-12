@@ -88,7 +88,7 @@ def get_record_id(access_key_id, access_key_secret, domain_name, domain_type, do
         records = data['DomainRecords']['Record']
         for record in records:
             if record['Line'] == domain_line:
-                return {record['RecordId']}
+                return record['RecordId']
         return 0
     except Exception as e:
         print(e)

@@ -36,8 +36,6 @@ def ddns(domain):
     
 def get_ip():
     global LocalIP
-    #sock = socket.create_connection(('ns1.dnspod.net', 6666), 20)
-    #LocalIP = sock.recv(16).decode('utf-8')
     url = str(request.urlopen(r'http://txt.go.sohu.com/ip/soip').read())
     ip = re.findall(r'\d+.\d+.\d+.\d+', url)
     LocalIP = ip[0]
