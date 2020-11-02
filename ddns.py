@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 from urllib import request
+from datetime import datetime
 import socket 
 import json
 import os
@@ -53,9 +54,27 @@ if __name__ == '__main__':
     
     try:
         get_ip()
-        for domain in Domains:
-            init_domain(domain)
-            ddns(domain)
+        if os.path.isfile("ip_records.ddns"):
+            with open("ip_records.ddns", "r") as f:
+                lines = f.readlines()
+                line = lines[-1].strip("\n")
+                last_ip = line.split(" ")[-1]
+                if last_ip != LocalIP:
+                    print("IP addres changed, update the configure of aliyundns!")
+                    for domain in Domains:
+                        init_domain(domain)
+                        ddns(domain)
+                else:
+                    print("IP addres not change!")
+            with open("ip_records.ddns", "a") as f:
+                f.writelines(datetime.now().strftime("%Y-%m-%d %H:%M:%S")+" "+last_ip+"\n")
+        else:
+            print("file not found, create it!")
+            with open("ip_records.ddns", "w") as f:
+                for domain in Domains:
+                    init_domain(domain)
+                    ddns(domain)
+                f.writelines(datetime.now().strftime("%Y-%m-%d %H:%M:%S")+" "+LocalIP+"\n")
     except Exception as e:
         print(e)
         pass
